@@ -15,5 +15,7 @@
 - `love-06.jpg`：DSCF1308.jpg · 山野与汽车
 - `love-07.jpg`：DSCF1331.jpg · 汽车前并肩
 - `love-08.jpg`：DSCF1310.jpg · 雪山前合影
+- `love-09.jpg`：DSCF0787.jpg · 山顶相望
+- `love-10.jpg`：DSCF1343.jpg · 汽车旁合影
 
 正式发布时无需保留免版权图库署名。

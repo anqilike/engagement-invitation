@@ -1277,7 +1277,7 @@ a {
   gap: 0.78rem;
   max-width: 72rem;
   margin: 0 auto;
-  align-items: start;
+  align-items: stretch;
 }
 
 .photo-card {
@@ -1394,12 +1394,11 @@ a {
 }
 
 .photo-card--pair-a {
-  aspect-ratio: 4 / 3;
+  min-height: 100%;
 }
 
 .photo-card--pair-b {
   aspect-ratio: 3 / 4;
-  margin-top: clamp(1.2rem, 3vw, 3rem);
 }
 
 .photo-card--pair-a .photo-card__button,
