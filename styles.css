@@ -590,6 +590,21 @@ a {
   transform: translateZ(0);
 }
 
+.hero__top {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.hero__bottom {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
 .hero .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -641,8 +656,7 @@ a {
 }
 
 .hero__headline {
-  display: block;
-  margin-top: 0.38rem;
+  margin: 0;
   font-size: clamp(2.85rem, 12.5vw, 6.8rem);
   letter-spacing: 0.04em;
   text-shadow: 0 18px 52px rgba(6, 1, 4, 0.62);
@@ -651,9 +665,9 @@ a {
 .hero__subtitle {
   width: 100%;
   max-width: 34rem;
-  margin: auto auto 0;
+  margin: 1.35rem 0 0;
   padding-inline: 0.5rem;
-  padding-top: 2rem;
+  padding-top: 0.35rem;
   color: var(--cream);
   font-family: var(--serif);
   font-size: clamp(0.95rem, 2.8vw, 1.2rem);
