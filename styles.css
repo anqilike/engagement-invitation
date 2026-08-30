@@ -585,7 +585,7 @@ a {
   align-items: center;
   width: min(100%, 52rem);
   margin: 0 auto;
-  padding: calc(var(--header-height) + 1.25rem) 1.35rem calc(4.5rem + var(--safe-bottom));
+  padding: calc(var(--header-height) + 1.25rem) 1.35rem calc(2.8rem + var(--safe-bottom));
   text-align: center;
   transform: translateZ(0);
 }
@@ -779,7 +779,7 @@ a {
 
 .scroll-cue {
   position: absolute;
-  bottom: calc(1.35rem + var(--safe-bottom));
+  bottom: calc(0.8rem + var(--safe-bottom));
   left: 50%;
   z-index: 5;
   display: grid;
@@ -794,7 +794,7 @@ a {
 .scroll-cue__line {
   position: relative;
   width: 1px;
-  height: 42px;
+  height: 34px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.2);
 }
