@@ -2029,6 +2029,12 @@ a {
 
 }
 
+@media (max-width: 899px) {
+  .scroll-cue {
+    display: none;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .photo-card__overlay {
     opacity: 0;
