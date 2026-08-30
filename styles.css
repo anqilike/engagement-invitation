@@ -1227,15 +1227,6 @@ a {
   font-size: 1.15rem;
 }
 
-.blessing-card__index {
-  position: absolute;
-  top: 0.86rem;
-  left: 1rem;
-  color: var(--gold);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-}
-
 .blessing-card__text {
   display: grid;
   gap: 0.4rem;

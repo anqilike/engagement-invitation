@@ -55,7 +55,6 @@
         .map(
           (item, index) => `
             <article class="blessing-card" data-reveal data-delay="${index}">
-              <span class="blessing-card__index">0${index + 1}</span>
               <p class="blessing-card__text">
                 <span class="blessing-card__line">${item.first}</span>
                 <span class="blessing-card__line">${item.second}</span>
