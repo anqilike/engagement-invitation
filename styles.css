@@ -660,6 +660,8 @@ a {
   font-size: clamp(2.85rem, 12.5vw, 6.8rem);
   letter-spacing: 0.04em;
   text-shadow: 0 18px 52px rgba(6, 1, 4, 0.62);
+  transform: translateY(1.4rem);
+  will-change: transform;
 }
 
 .hero__subtitle {
