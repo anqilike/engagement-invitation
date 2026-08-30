@@ -25,10 +25,10 @@ window.INVITATION_CONFIG = {
     "您的到场，便是我们最好的祝福与礼物。"
   ],
   blessings: [
-    "花开并蒂　喜结良缘",
-    "郎才女貌　天作之合",
-    "携手相伴　岁岁年年",
-    "花好月圆　喜乐长安"
+    { first: "花开并蒂", second: "喜结良缘" },
+    { first: "郎才女貌", second: "天作之合" },
+    { first: "携手相伴", second: "岁岁年年" },
+    { first: "花好月圆", second: "喜乐长安" }
   ],
 
   // 日期：请填真实日期，格式为 YYYY-MM-DDTHH:mm:ss+08:00
