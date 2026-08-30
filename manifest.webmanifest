@@ -1,0 +1,16 @@
+{
+  "name": "双喜临门 · 胡珊珊 & 吕志方",
+  "short_name": "双喜临门",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#5a0c18",
+  "theme_color": "#5a0c18",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
