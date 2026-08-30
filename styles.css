@@ -1168,6 +1168,102 @@ a {
   letter-spacing: 0.16em;
 }
 
+/* ---------- 喜语寄福 ---------- */
+
+.blessings-section {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 80, 101, 0.14), transparent 22rem),
+    linear-gradient(180deg, rgba(106, 13, 27, 0.18), rgba(92, 10, 23, 0.32));
+}
+
+.blessings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  max-width: 66rem;
+  margin: 0 auto;
+}
+
+.blessing-card {
+  position: relative;
+  display: grid;
+  min-height: 10.6rem;
+  place-items: center;
+  padding: 1.6rem 1rem 1.25rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 225, 151, 0.18);
+  border-radius: 24px;
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
+    rgba(101, 12, 27, 0.5);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: transform 0.45s var(--ease), border-color 0.35s, box-shadow 0.45s var(--ease);
+}
+
+.blessing-card::before {
+  content: "";
+  position: absolute;
+  top: -3.5rem;
+  right: -3.5rem;
+  width: 8rem;
+  height: 8rem;
+  border: 1px solid rgba(255, 225, 151, 0.16);
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.blessing-card::after {
+  content: "囍";
+  position: absolute;
+  top: 0.62rem;
+  right: 0.85rem;
+  color: rgba(255, 210, 105, 0.34);
+  font-family: var(--serif);
+  font-size: 1.15rem;
+}
+
+.blessing-card__index {
+  position: absolute;
+  top: 0.86rem;
+  left: 1rem;
+  color: var(--gold);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+}
+
+.blessing-card__text {
+  margin: 0;
+  color: var(--cream);
+  font-family: var(--serif);
+  font-size: clamp(1.1rem, 5vw, 1.55rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.blessing-card:hover,
+.blessing-card:active {
+  transform: translateY(-3px);
+  border-color: rgba(255, 225, 151, 0.42);
+  box-shadow: 0 24px 58px rgba(0, 0, 0, 0.32), 0 0 28px rgba(255, 80, 101, 0.14);
+}
+
+@media (min-width: 700px) {
+  .blessings-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .blessing-card {
+    min-height: 12rem;
+    padding-inline: 1.2rem;
+  }
+}
+
 /* ---------- 照片画廊 ---------- */
 
 .gallery-section {

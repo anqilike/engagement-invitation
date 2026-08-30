@@ -49,6 +49,19 @@
         .join("");
     }
 
+    const blessingsGrid = $("#blessingsGrid");
+    if (blessingsGrid && Array.isArray(config.blessings)) {
+      blessingsGrid.innerHTML = config.blessings
+        .map(
+          (item, index) => `
+            <article class="blessing-card" data-reveal data-delay="${index}">
+              <span class="blessing-card__index">0${index + 1}</span>
+              <p class="blessing-card__text">${item}</p>
+            </article>`
+        )
+        .join("");
+    }
+
     const timeline = $("#timeline");
     if (timeline && Array.isArray(config.agenda)) {
       timeline.innerHTML = config.agenda
