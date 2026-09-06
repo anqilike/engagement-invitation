@@ -5,6 +5,7 @@
   const config = window.INVITATION_CONFIG || {};
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  const isLuxe = document.body.classList.contains("luxe-mode");
   const previewParams = new URLSearchParams(window.location.search);
   const previewMode = previewParams.has("preview");
 
@@ -227,7 +228,7 @@
 
     const makeParticle = (randomY = false) => {
       const color = colors[Math.floor(Math.random() * colors.length)];
-      const size = 2.5 + Math.random() * 7;
+      const size = isLuxe ? 4 + Math.random() * 8 : 2.5 + Math.random() * 7;
       return {
         x: Math.random() * width,
         y: randomY ? Math.random() * height : height + size + Math.random() * 80,
@@ -275,6 +276,26 @@
       ctx.restore();
     };
 
+    const drawHeart = (particle) => {
+      const size = particle.size;
+      ctx.save();
+      ctx.translate(particle.x, particle.y);
+      ctx.rotate(particle.rotation);
+      ctx.globalAlpha = particle.opacity * 0.9;
+
+      const gradient = ctx.createLinearGradient(-size, -size, size, size);
+      gradient.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`);
+      gradient.addColorStop(1, `rgba(255, 80, 101, 0.92)`);
+      ctx.fillStyle = gradient;
+
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.35);
+      ctx.bezierCurveTo(size * 0.8, -size * 0.2, size * 1.2, size * 0.55, 0, size * 1.2);
+      ctx.bezierCurveTo(-size * 1.2, size * 0.55, -size * 0.8, -size * 0.2, 0, size * 0.35);
+      ctx.fill();
+      ctx.restore();
+    };
+
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
       particles.forEach((particle) => {
@@ -285,7 +306,11 @@
         if (particle.y < -particle.size * 3 || particle.x < -40 || particle.x > width + 40) {
           Object.assign(particle, makeParticle(false));
         }
-        drawPetal(particle);
+        if (isLuxe) {
+          drawHeart(particle);
+        } else {
+          drawPetal(particle);
+        }
       });
       requestAnimationFrame(animate);
     };
