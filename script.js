@@ -6,7 +6,6 @@
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
   const isLuxe = document.body.classList.contains("luxe-mode");
-  const isV3 = document.body.classList.contains("v3-mode");
   const previewParams = new URLSearchParams(window.location.search);
   const previewMode = previewParams.has("preview");
 
@@ -92,7 +91,7 @@
       return;
     }
 
-    const duration = isV3 ? 2800 : 1500;
+    const duration = 1500;
     const start = performance.now();
 
     const tick = (now) => {
@@ -100,7 +99,7 @@
       const eased = 1 - Math.pow(1 - progress, 3);
       const value = Math.round(eased * 100);
       percent.textContent = `${value}%`;
-      label.textContent = isV3 ? "胡珊珊 · 吕志方" : progress < 0.42 ? "正在为您打开" : progress < 0.8 ? "正在布置喜宴" : "马上就好";
+      label.textContent = progress < 0.42 ? "正在为您打开" : progress < 0.8 ? "正在布置喜宴" : "马上就好";
 
       if (progress < 1) {
         requestAnimationFrame(tick);
@@ -188,16 +187,6 @@
 
     const pad = (value) => String(Math.max(0, value)).padStart(2, "0");
 
-    const setValue = (element, value) => {
-      if (element.textContent === value) return;
-      element.textContent = value;
-      if (!isV3) return;
-      element.classList.remove("is-flip");
-      void element.offsetWidth;
-      element.classList.add("is-flip");
-      window.setTimeout(() => element.classList.remove("is-flip"), 440);
-    };
-
     const update = () => {
       const distance = target - Date.now();
 
@@ -207,10 +196,10 @@
         return;
       }
 
-      setValue(days, pad(Math.floor(distance / 86400000)));
-      setValue(hours, pad(Math.floor((distance % 86400000) / 3600000)));
-      setValue(minutes, pad(Math.floor((distance % 3600000) / 60000)));
-      setValue(seconds, pad(Math.floor((distance % 60000) / 1000)));
+      days.textContent = pad(Math.floor(distance / 86400000));
+      hours.textContent = pad(Math.floor((distance % 86400000) / 3600000));
+      minutes.textContent = pad(Math.floor((distance % 3600000) / 60000));
+      seconds.textContent = pad(Math.floor((distance % 60000) / 1000));
     };
 
     update();
@@ -237,97 +226,6 @@
       { r: 239, g: 111, b: 145 }
     ];
 
-    const resize = () => {
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = Math.round(width * ratio);
-      canvas.height = Math.round(height * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    };
-
-    const makeFoil = () => ({
-      x: Math.random() * width,
-      y: -20 - Math.random() * 40,
-      size: 3 + Math.random() * 4,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: 0.35 + Math.random() * 0.7,
-      rotation: Math.random() * Math.PI,
-      rotationSpeed: (Math.random() - 0.5) * 0.06,
-      opacity: 0.15 + Math.random() * 0.2
-    });
-
-    const drawFoil = (particle) => {
-      ctx.save();
-      ctx.translate(particle.x, particle.y);
-      ctx.rotate(particle.rotation);
-      ctx.globalAlpha = particle.opacity;
-      ctx.fillStyle = `rgba(255, 218, 138, 0.9)`;
-      ctx.beginPath();
-      ctx.moveTo(0, -particle.size * 2.4);
-      ctx.lineTo(particle.size * 0.7, 0);
-      ctx.lineTo(0, particle.size * 2.4);
-      ctx.lineTo(-particle.size * 0.7, 0);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    };
-
-    if (isV3) {
-      resize();
-      let rafId = null;
-      let running = false;
-
-      const burst = () => {
-        if (document.hidden || running || !width || !height) return;
-        const count = width < 700 ? 8 : 18;
-        particles = Array.from({ length: count }, makeFoil);
-        running = true;
-        const startedAt = performance.now();
-
-        const tick = (now) => {
-          ctx.clearRect(0, 0, width, height);
-          particles.forEach((particle) => {
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-            particle.x += Math.sin(particle.y * 0.01) * 0.2;
-            particle.rotation += particle.rotationSpeed;
-            drawFoil(particle);
-          });
-          particles = particles.filter((particle) => particle.y < height + 40);
-
-          if (particles.length && now - startedAt < 2200 && !document.hidden) {
-            rafId = requestAnimationFrame(tick);
-          } else {
-            running = false;
-            ctx.clearRect(0, 0, width, height);
-          }
-        };
-
-        rafId = requestAnimationFrame(tick);
-      };
-
-      window.setTimeout(burst, 2400);
-      const blessings = $("#blessings");
-      if (blessings && "IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            if (entries.some((entry) => entry.isIntersecting)) {
-              burst();
-              observer.disconnect();
-            }
-          },
-          { threshold: 0.35 }
-        );
-        observer.observe(blessings);
-      }
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden && !running) burst();
-      });
-      window.addEventListener("resize", resize, { passive: true });
-      return;
-    }
-
     const makeParticle = (randomY = false) => {
       const color = colors[Math.floor(Math.random() * colors.length)];
       const size = isLuxe ? 4 + Math.random() * 8 : 2.5 + Math.random() * 7;
@@ -345,20 +243,35 @@
       };
     };
 
+    const resize = () => {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      const count = Math.min(34, Math.round(width / 46));
+      particles = Array.from({ length: count }, () => makeParticle(true));
+    };
+
     const drawPetal = (particle) => {
       ctx.save();
       ctx.translate(particle.x, particle.y);
       ctx.rotate(particle.rotation);
       ctx.globalAlpha = particle.opacity;
+
       const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, particle.size * 1.2);
       gradient.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`);
       gradient.addColorStop(1, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 0)`);
       ctx.fillStyle = gradient;
+
       ctx.beginPath();
       ctx.ellipse(0, 0, particle.size * 0.7, particle.size * 1.65, 0, 0, Math.PI * 2);
       ctx.fill();
+
       ctx.beginPath();
-      ctx.arc(particle.size * 1.6, particle.size, particle.size * 0.28, 0, Math.PI * 2);
+      ctx.arc(particle.size * 1.6, particle.size * 1.0, particle.size * 0.28, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     };
@@ -369,10 +282,12 @@
       ctx.translate(particle.x, particle.y);
       ctx.rotate(particle.rotation);
       ctx.globalAlpha = particle.opacity * 0.9;
+
       const gradient = ctx.createLinearGradient(-size, -size, size, size);
       gradient.addColorStop(0, `rgba(${particle.color.r}, ${particle.color.g}, ${particle.color.b}, 1)`);
       gradient.addColorStop(1, `rgba(255, 80, 101, 0.92)`);
       ctx.fillStyle = gradient;
+
       ctx.beginPath();
       ctx.moveTo(0, size * 0.35);
       ctx.bezierCurveTo(size * 0.8, -size * 0.2, size * 1.2, size * 0.55, 0, size * 1.2);
@@ -381,15 +296,13 @@
       ctx.restore();
     };
 
-    resize();
-    const count = Math.min(34, Math.round(width / 46));
-    particles = Array.from({ length: count }, () => makeParticle(true));
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
       particles.forEach((particle) => {
         particle.y -= particle.speed;
         particle.x += Math.sin(particle.y * 0.008 + particle.swaySpeed) * particle.sway;
         particle.rotation += particle.rotationSpeed;
+
         if (particle.y < -particle.size * 3 || particle.x < -40 || particle.x > width + 40) {
           Object.assign(particle, makeParticle(false));
         }
@@ -401,6 +314,8 @@
       });
       requestAnimationFrame(animate);
     };
+
+    resize();
     animate();
     window.addEventListener("resize", resize, { passive: true });
     window.addEventListener("orientationchange", () => window.setTimeout(resize, 250));
@@ -422,13 +337,8 @@
         progress.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollTop / max) : 0})`;
       }
 
-      if (hero && heroMedia) {
-        if (isV3) {
-          const progress = Math.min(1, scrollTop / (window.innerHeight * 0.82));
-          heroMedia.style.setProperty("--scroll-progress", progress.toFixed(3));
-        } else if (scrollTop < window.innerHeight * 1.3) {
-          heroMedia.style.transform = `translate3d(0, ${scrollTop * 0.12}px, 0) scale(1.02)`;
-        }
+      if (hero && heroMedia && scrollTop < window.innerHeight * 1.3) {
+        heroMedia.style.transform = `translate3d(0, ${scrollTop * 0.12}px, 0) scale(1.02)`;
       }
 
       ticking = false;
@@ -471,21 +381,6 @@
   function initPhotoTilt() {
     if (isTouch || prefersReducedMotion) return;
 
-    if (isV3) {
-      $$(".photo-card__button").forEach((card) => {
-        card.addEventListener("pointermove", (event) => {
-          const bounds = card.getBoundingClientRect();
-          card.style.setProperty("--x", `${((event.clientX - bounds.left) / bounds.width * 100).toFixed(2)}%`);
-          card.style.setProperty("--y", `${((event.clientY - bounds.top) / bounds.height * 100).toFixed(2)}%`);
-        });
-        card.addEventListener("pointerleave", () => {
-          card.style.setProperty("--x", "50%");
-          card.style.setProperty("--y", "50%");
-        });
-      });
-      return;
-    }
-
     $$(".photo-card__button").forEach((card) => {
       card.addEventListener("pointermove", (event) => {
         const bounds = card.getBoundingClientRect();
@@ -498,28 +393,6 @@
       card.addEventListener("pointerleave", () => {
         card.style.setProperty("--tilt-x", "0deg");
         card.style.setProperty("--tilt-y", "0deg");
-      });
-    });
-  }
-
-  /* ---------- 桌面按钮磁力 ---------- */
-  function initMagneticButtons() {
-    if (!isV3 || isTouch || prefersReducedMotion) return;
-
-    $$(".magnetic").forEach((button) => {
-      let resetTimer = null;
-      button.addEventListener("pointermove", (event) => {
-        const bounds = button.getBoundingClientRect();
-        const x = Math.max(-10, Math.min(10, (event.clientX - bounds.left - bounds.width / 2) / bounds.width * 18));
-        const y = Math.max(-10, Math.min(10, (event.clientY - bounds.top - bounds.height / 2) / bounds.height * 18));
-        window.clearTimeout(resetTimer);
-        button.style.setProperty("--mx", `${x.toFixed(2)}px`);
-        button.style.setProperty("--my", `${y.toFixed(2)}px`);
-      });
-      button.addEventListener("pointerleave", () => {
-        window.clearTimeout(resetTimer);
-        button.style.setProperty("--mx", "0px");
-        button.style.setProperty("--my", "0px");
       });
     });
   }
@@ -563,26 +436,7 @@
       document.body.classList.remove("is-lightbox-open");
     };
 
-    const show = (offset) => {
-      if (!isV3) {
-        open(current + offset);
-        return;
-      }
-
-      const leaveClass = offset > 0 ? "is-leaving-left" : "is-leaving-right";
-      image.classList.remove("is-entering-left", "is-entering-right");
-      image.classList.add(leaveClass);
-
-      window.setTimeout(() => {
-        current = (current + offset + items.length) % items.length;
-        render();
-        image.classList.remove(leaveClass);
-        image.classList.add(offset > 0 ? "is-entering-left" : "is-entering-right");
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          image.classList.remove("is-entering-left", "is-entering-right");
-        }));
-      }, 180);
-    };
+    const show = (offset) => open(current + offset);
 
     buttons.forEach((button, index) => button.addEventListener("click", () => open(index)));
     $("#lightboxClose").addEventListener("click", close);
@@ -656,30 +510,13 @@
     const tip = $("#rsvpTip");
     const addressText = `${config.locationName || ""} ${config.locationDetail || ""}`.trim();
 
-    const inlineConfirm = (button, label) => {
-      if (!isV3 || !button) return;
-      const span = button.querySelector("span");
-      if (!span) return;
-      const original = span.textContent;
-      button.classList.add("is-copied");
-      span.textContent = "已复制 ✓";
-      window.setTimeout(() => {
-        span.textContent = original;
-        button.classList.remove("is-copied");
-      }, 1800);
-    };
-
     if (copyAddress) {
-      copyAddress.addEventListener("click", () => {
-        copyText(addressText, "地址已复制");
-        inlineConfirm(copyAddress, "地址已复制");
-      });
+      copyAddress.addEventListener("click", () => copyText(addressText, "地址已复制"));
     }
 
     if (copyRsvpAddress) {
       copyRsvpAddress.addEventListener("click", () => {
         copyText(addressText, "宴会地址已复制");
-        inlineConfirm(copyRsvpAddress, "宴会地址已复制");
         if (tip) {
           tip.classList.add("is-copied");
           const span = tip.querySelector("span");
@@ -700,7 +537,6 @@
     initScrollEffects();
     initNavigation();
     initPhotoTilt();
-    initMagneticButtons();
     initLightbox();
     initCopyActions();
 
