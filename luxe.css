@@ -1,0 +1,262 @@
+/* 高级版 · 只作用于 .luxe-mode */
+
+.luxe-mode .site-header.is-scrolled {
+  border-bottom-color: rgba(255, 213, 124, 0.42);
+  background: rgba(82, 5, 18, 0.86);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.22);
+}
+
+.luxe-mode .brand__name {
+  color: var(--gold-light);
+  text-shadow: 0 0 22px rgba(255, 210, 105, 0.28);
+}
+
+.luxe-mode .hero .eyebrow {
+  border-color: rgba(255, 222, 145, 0.56);
+  background: rgba(91, 8, 24, 0.52);
+  box-shadow: 0 0 28px rgba(255, 202, 88, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.luxe-mode .hero__halo {
+  opacity: 0.8;
+  background: radial-gradient(circle, rgba(255, 211, 104, 0.34), rgba(255, 91, 111, 0.12), transparent 62%);
+}
+
+.luxe-mode .hero__names {
+  gap: 0.8rem;
+}
+
+.luxe-mode .name {
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.24));
+}
+
+.luxe-mode .hero__headline {
+  color: transparent;
+  background: linear-gradient(105deg, #fff4d8, #f7cb6c 44%, #fff8e7 52%, #ebae4f);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: goldShimmer 5.5s linear infinite;
+  filter: drop-shadow(0 10px 32px rgba(253, 185, 71, 0.28));
+}
+
+.luxe-mode .hero__date-pill {
+  border-color: rgba(255, 213, 124, 0.44);
+  background: rgba(84, 5, 20, 0.62);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 12px 34px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- 喜柬 ---------- */
+
+.invitation-plate-section {
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 204, 95, 0.14), transparent 26rem),
+    linear-gradient(180deg, rgba(78, 4, 17, 0.46), rgba(109, 13, 29, 0.3));
+}
+
+.invitation-plate {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: clamp(2.4rem, 7vw, 4.2rem) clamp(1.4rem, 5vw, 3rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 214, 125, 0.42);
+  border-radius: 30px;
+  color: var(--cream);
+  text-align: center;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
+    rgba(91, 8, 24, 0.74);
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255, 224, 153, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.invitation-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 24%, rgba(255, 224, 153, 0.15) 46%, transparent 68%);
+  animation: plateShine 8s ease-in-out infinite;
+}
+
+.invitation-plate::after {
+  content: "";
+  position: absolute;
+  top: -6rem;
+  right: -6rem;
+  width: 14rem;
+  height: 14rem;
+  border: 1px solid rgba(255, 213, 124, 0.18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 24px rgba(255, 213, 124, 0.025), 0 0 0 48px rgba(255, 213, 124, 0.018);
+  pointer-events: none;
+}
+
+.invitation-plate__seal {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 4.6rem;
+  height: 4.6rem;
+  place-items: center;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 215, 130, 0.7);
+  border-radius: 50%;
+  color: #ffd984;
+  background: linear-gradient(145deg, rgba(255, 86, 105, 0.2), rgba(114, 12, 29, 0.44));
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  box-shadow: 0 0 28px rgba(255, 95, 113, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.invitation-plate__eyebrow {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 0.9rem;
+  color: var(--gold);
+  font-size: 0.62rem;
+  letter-spacing: 0.34em;
+}
+
+.invitation-plate h2 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 9vw, 4.6rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+  text-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+.invitation-plate__names {
+  position: relative;
+  z-index: 1;
+  margin: 1rem 0 0;
+  color: var(--gold-light);
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 4vw, 1.45rem);
+  letter-spacing: 0.18em;
+}
+
+.invitation-plate__divider {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(72%, 18rem);
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.45rem 0;
+}
+
+.invitation-plate__divider::before,
+.invitation-plate__divider::after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 213, 124, 0.7));
+}
+
+.invitation-plate__divider::after {
+  background: linear-gradient(90deg, rgba(255, 213, 124, 0.7), transparent);
+}
+
+.invitation-plate__divider span {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--gold), var(--rose));
+  box-shadow: 0 0 14px rgba(255, 205, 105, 0.58);
+}
+
+.invitation-plate__date,
+.invitation-plate__venue {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: rgba(255, 242, 225, 0.9);
+  font-family: var(--serif);
+  font-size: clamp(0.92rem, 3.4vw, 1.15rem);
+  letter-spacing: 0.1em;
+}
+
+.invitation-plate__venue {
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: clamp(0.8rem, 3vw, 0.96rem);
+  line-height: 1.8;
+}
+
+.invitation-plate .btn {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.8rem;
+}
+
+@keyframes plateShine {
+  0%, 28% { transform: translateX(-110%); }
+  52%, 100% { transform: translateX(110%); }
+}
+
+/* ---------- 增强细节 ---------- */
+
+.luxe-mode .section-kicker {
+  color: var(--gold-light);
+}
+
+.luxe-mode .section-title {
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.luxe-mode .section-title::after {
+  content: "";
+  display: block;
+  width: 3.4rem;
+  height: 1px;
+  margin: 1.1rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.luxe-mode .photo-card__button {
+  border-color: rgba(255, 216, 133, 0.2);
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.luxe-mode .photo-card__button:hover,
+.luxe-mode .photo-card__button:active {
+  border-color: rgba(255, 218, 140, 0.7);
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.44),
+    0 0 38px rgba(255, 185, 76, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.luxe-mode .rsvp__title {
+  filter: drop-shadow(0 10px 26px rgba(255, 186, 70, 0.22));
+}
+
+.luxe-mode .footer__monogram {
+  font-size: clamp(1.5rem, 5.5vw, 2.3rem);
+}
+
+.luxe-mode .site-footer {
+  border-top-color: rgba(255, 213, 124, 0.28);
+  background: linear-gradient(180deg, rgba(73, 3, 16, 0.64), rgba(42, 1, 9, 0.7));
+}
+
+@media (min-width: 900px) {
+  .invitation-plate {
+    padding: 4.6rem 4rem;
+  }
+}
