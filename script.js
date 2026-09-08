@@ -25,9 +25,9 @@
     text("#preloaderMark", config.monogram);
     text("#footerMonogram", config.monogram);
     text("#eventTitle", config.eventTitle);
-    text(".hero .eyebrow", config.eyebrow);
-    text(".story__eyebrow", config.eyebrow);
-    text(".mobile-nav__eyebrow", config.eyebrow);
+    text(".hero .eyebrow", config.heroEyebrow || config.eyebrow);
+    text(".story__eyebrow", config.storyEyebrow || "OUR INVITATION");
+    text(".mobile-nav__eyebrow", config.navEyebrow || "INVITATION");
     text("#subtitle", config.subtitle);
     text("#footerLine", config.footerLine);
     text("#signatureNames", config.host ? config.host.replace("邀请人：", "") : `${config.groom || ""} & ${config.bride || ""}`);
@@ -36,9 +36,25 @@
     text("#locationDate", config.dateLabel);
     text("#locationName", config.locationName);
     text("#locationDetail", config.locationDetail);
-    text("#phoneLabel", `${config.phoneLabel || "微信 / 电话"}${config.weixinId ? ` · ${config.weixinId}` : ""}`);
-    text("#phoneValue", config.phoneValue);
+    text("#phoneLabel", config.phoneLabel || "邀请人");
+    const contactParts = [
+      config.phoneValue,
+      config.contactPhone ? `电话 ${config.contactPhone}` : "",
+      config.weixinId ? `微信 ${config.weixinId}` : ""
+    ].filter(Boolean);
+    text("#phoneValue", contactParts.join(" · ") || "如有疑问，请直接联系邀请人");
     text("#footerHost", config.host);
+    text("#rsvpDeadline", config.rsvpDeadline);
+
+    const rsvpContact = $("#rsvpContact");
+    if (rsvpContact) {
+      const parts = [
+        config.contactPhone ? `电话 ${config.contactPhone}` : "",
+        config.weixinId ? `微信 ${config.weixinId}` : ""
+      ].filter(Boolean);
+      rsvpContact.textContent = parts.join(" · ");
+      rsvpContact.hidden = parts.length === 0;
+    }
 
     const mapLink = $("#mapLink");
     if (mapLink && config.mapUrl) mapLink.href = config.mapUrl;
@@ -91,24 +107,47 @@
       return;
     }
 
-    const duration = 1500;
+    const heroImage = $(".hero__media img");
+    const minDuration = 420;
+    const maxDuration = 1200;
     const start = performance.now();
+    let finished = false;
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      if (percent) percent.textContent = "100%";
+      if (label) label.textContent = "马上就好";
+      finishPreloader();
+    };
+
+    const finishWhenReady = () => {
+      const remaining = Math.max(0, minDuration - (performance.now() - start));
+      window.setTimeout(finish, remaining);
+    };
+
+    if (!heroImage || (heroImage.complete && heroImage.naturalWidth > 0)) {
+      finishWhenReady();
+    } else {
+      heroImage.addEventListener("load", finishWhenReady, { once: true });
+      heroImage.addEventListener("error", finishWhenReady, { once: true });
+      if (heroImage.decode) {
+        heroImage.decode().then(finishWhenReady).catch(() => {});
+      }
+    }
 
     const tick = (now) => {
-      const progress = Math.min(1, (now - start) / duration);
+      if (finished) return;
+      const progress = Math.min(1, (now - start) / maxDuration);
       const eased = 1 - Math.pow(1 - progress, 3);
       const value = Math.round(eased * 100);
-      percent.textContent = `${value}%`;
-      label.textContent = progress < 0.42 ? "正在为您打开" : progress < 0.8 ? "正在布置喜宴" : "马上就好";
-
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        finishPreloader();
-      }
+      if (percent) percent.textContent = `${value}%`;
+      if (label) label.textContent = progress < 0.42 ? "正在为您打开" : progress < 0.8 ? "正在布置喜宴" : "马上就好";
+      if (progress < 1) requestAnimationFrame(tick);
     };
 
     requestAnimationFrame(tick);
+    window.setTimeout(finish, maxDuration);
   }
 
   function finishPreloader() {
@@ -138,12 +177,16 @@
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+      { rootMargin: "0px", threshold: 0.08 }
     );
 
     elements.forEach((el) => {
       const delay = el.dataset.delay || 0;
       el.style.setProperty("--reveal-delay", delay);
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.98) {
+        el.classList.add("is-visible");
+        return;
+      }
       observer.observe(el);
     });
   }
@@ -186,6 +229,7 @@
     if (![days, hours, minutes, seconds].every(Boolean) || Number.isNaN(target)) return;
 
     const pad = (value) => String(Math.max(0, value)).padStart(2, "0");
+    let timer = null;
 
     const update = () => {
       const distance = target - Date.now();
@@ -193,6 +237,7 @@
       if (distance <= 0) {
         countdown.hidden = true;
         ending.hidden = false;
+        if (timer) window.clearInterval(timer);
         return;
       }
 
@@ -203,7 +248,7 @@
     };
 
     update();
-    window.setInterval(update, 1000);
+    if (!countdown.hidden) timer = window.setInterval(update, 1000);
   }
 
   /* ---------- 花瓣粒子 ---------- */
@@ -251,7 +296,7 @@
       canvas.height = Math.round(height * ratio);
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-      const count = Math.min(34, Math.round(width / 46));
+      const count = Math.min(24, Math.round(width / 52));
       particles = Array.from({ length: count }, () => makeParticle(true));
     };
 
@@ -296,7 +341,11 @@
       ctx.restore();
     };
 
+    let frameId = null;
+    let running = false;
+
     const animate = () => {
+      if (!running) return;
       ctx.clearRect(0, 0, width, height);
       particles.forEach((particle) => {
         particle.y -= particle.speed;
@@ -312,11 +361,43 @@
           drawPetal(particle);
         }
       });
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
+    };
+
+    const start = () => {
+      if (running) return;
+      running = true;
+      frameId = requestAnimationFrame(animate);
+    };
+
+    const stop = () => {
+      running = false;
+      if (frameId) window.cancelAnimationFrame(frameId);
+      frameId = null;
     };
 
     resize();
-    animate();
+    start();
+
+    const hero = $("#hero");
+    if (hero && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !document.hidden) start();
+            else stop();
+          });
+        },
+        { threshold: 0 }
+      );
+      observer.observe(hero);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else if (!hero || hero.getBoundingClientRect().bottom > 0) start();
+    });
+
     window.addEventListener("resize", resize, { passive: true });
     window.addEventListener("orientationchange", () => window.setTimeout(resize, 250));
   }
@@ -337,8 +418,10 @@
         progress.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollTop / max) : 0})`;
       }
 
-      if (hero && heroMedia && scrollTop < window.innerHeight * 1.3) {
+      if (!prefersReducedMotion && hero && heroMedia && scrollTop < window.innerHeight * 1.3) {
         heroMedia.style.transform = `translate3d(0, ${scrollTop * 0.12}px, 0) scale(1.02)`;
+      } else if (heroMedia) {
+        heroMedia.style.transform = "";
       }
 
       ticking = false;
@@ -362,18 +445,49 @@
     const nav = $("#mobileNav");
     if (!toggle || !nav) return;
 
-    const setOpen = (open) => {
+    const getFocusable = () => $$("a[href], button:not([disabled])", nav).filter((el) => el.getClientRects().length > 0);
+
+    const setOpen = (open, restoreFocus = true) => {
       toggle.classList.toggle("is-open", open);
       nav.classList.toggle("is-open", open);
       toggle.setAttribute("aria-expanded", String(open));
+      const label = open ? "关闭菜单" : "打开菜单";
+      toggle.setAttribute("aria-label", label);
+      text("#menuToggleLabel", label);
       document.body.classList.toggle("is-nav-open", open);
+
+      if (open) {
+        window.setTimeout(() => {
+          const first = getFocusable()[0];
+          if (first) first.focus();
+        }, 60);
+      } else if (restoreFocus) {
+        toggle.focus();
+      }
     };
 
     toggle.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
-    $$("a", nav).forEach((link) => link.addEventListener("click", () => setOpen(false)));
+    $$("a", nav).forEach((link) => link.addEventListener("click", () => setOpen(false, false)));
 
     window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") setOpen(false);
+      if (!nav.classList.contains("is-open")) return;
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusable = getFocusable();
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
   }
 
@@ -403,6 +517,7 @@
     const image = $("#lightboxImage");
     const caption = $("#lightboxCaption");
     const counter = $("#lightboxCounter");
+    const loader = $("#lightboxLoader");
     if (!lightbox || !image) return;
 
     const buttons = $$("[data-full]");
@@ -414,17 +529,27 @@
 
     let current = 0;
     let touchStartX = 0;
+    let lastFocused = null;
 
     const render = () => {
       const item = items[current];
+      if (loader) loader.hidden = false;
       image.src = item.src;
       image.alt = item.alt;
       caption.textContent = item.label;
       counter.textContent = `${String(current + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`;
     };
 
+    image.addEventListener("load", () => {
+      if (loader) loader.hidden = true;
+    });
+    image.addEventListener("error", () => {
+      if (loader) loader.hidden = true;
+    });
+
     const open = (index) => {
       current = (index + items.length) % items.length;
+      if (lightbox.hidden) lastFocused = document.activeElement;
       lightbox.hidden = false;
       document.body.classList.add("is-lightbox-open");
       render();
@@ -433,7 +558,10 @@
 
     const close = () => {
       lightbox.hidden = true;
+      if (loader) loader.hidden = true;
       document.body.classList.remove("is-lightbox-open");
+      if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+      lastFocused = null;
     };
 
     const show = (offset) => open(current + offset);
@@ -467,9 +595,25 @@
 
     window.addEventListener("keydown", (event) => {
       if (lightbox.hidden) return;
-      if (event.key === "Escape") close();
+      if (event.key === "Escape") {
+        close();
+        return;
+      }
       if (event.key === "ArrowLeft") show(-1);
       if (event.key === "ArrowRight") show(1);
+      if (event.key !== "Tab") return;
+
+      const focusable = $$("button:not([disabled])", lightbox).filter((el) => el.getClientRects().length > 0);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
   }
 
@@ -481,11 +625,15 @@
   function showToast(message) {
     if (!toast || !toastText) return;
     toastText.textContent = message;
+    toast.setAttribute("aria-hidden", "false");
     toast.classList.remove("is-show");
     window.clearTimeout(toastTimer);
     void toast.offsetWidth;
     toast.classList.add("is-show");
-    toastTimer = window.setTimeout(() => toast.classList.remove("is-show"), 2200);
+    toastTimer = window.setTimeout(() => {
+      toast.classList.remove("is-show");
+      toast.setAttribute("aria-hidden", "true");
+    }, 2200);
   }
 
   async function copyText(value, message = "已复制") {
@@ -526,6 +674,78 @@
     }
   }
 
+  function initRsvp() {
+    const send = $("#sendRsvp");
+    const nameInput = $("#rsvpName");
+    const noteInput = $("#rsvpNote");
+    const tip = $("#rsvpTip");
+    const formLink = $("#rsvpFormLink");
+    const statusButtons = $$("[data-rsvp-status]");
+    let selectedStatus = statusButtons[0]?.dataset.rsvpStatus || "我会出席";
+
+    const setTip = (message) => {
+      if (!tip) return;
+      tip.classList.add("is-copied");
+      const span = tip.querySelector("span");
+      if (span) span.textContent = message;
+    };
+
+    statusButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedStatus = button.dataset.rsvpStatus || selectedStatus;
+        statusButtons.forEach((item) => {
+          const selected = item === button;
+          item.classList.toggle("is-selected", selected);
+          item.setAttribute("aria-pressed", String(selected));
+        });
+      });
+    });
+
+    if (formLink && config.rsvpUrl) {
+      formLink.href = config.rsvpUrl;
+      formLink.hidden = false;
+    }
+
+    if (send && config.rsvpUrl) {
+      const span = send.querySelector("span");
+      if (span) span.textContent = "填写在线回执";
+    }
+
+    if (!send) return;
+    send.addEventListener("click", async () => {
+      if (config.rsvpUrl) {
+        window.open(config.rsvpUrl, "_blank", "noopener");
+        return;
+      }
+
+      const name = nameInput ? nameInput.value.trim() : "";
+      const note = noteInput ? noteInput.value.trim() : "";
+      const hostName = config.host ? config.host.replace("邀请人：", "") : "邀请人";
+      const message = [
+        `${hostName}，您好！`,
+        `我是${name || "宾客"}，${selectedStatus}10月2日的订婚宴。`,
+        note ? `备注：${note}` : "",
+        "期待与您相见。"
+      ].filter(Boolean).join("\n");
+
+      await copyText(message, "回执内容已复制");
+      setTip("回执内容已复制，请发送给邀请人。");
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `${config.monogram || "订婚宴"} · 回执`,
+            text: message
+          });
+          showToast("回执已复制并打开分享");
+          return;
+        } catch (error) {
+          if (error && error.name === "AbortError") return;
+        }
+      }
+    });
+  }
+
   /* ---------- 初始化 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     applyConfig();
@@ -539,6 +759,7 @@
     initPhotoTilt();
     initLightbox();
     initCopyActions();
+    initRsvp();
 
     if (previewMode) {
       const targetSection = previewParams.get("section");
@@ -553,8 +774,5 @@
       }
     }
 
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") initReveals();
-    });
   });
 })();

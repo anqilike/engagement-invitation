@@ -1,11 +1,32 @@
 {
   "name": "双喜临门 · 胡珊珊 & 吕志方",
   "short_name": "双喜临门",
-  "start_url": "./index.html",
+  "description": "胡珊珊与吕志方的订婚仪式暨乔迁新居喜宴邀请函。",
+  "start_url": "./index-luxe.html?v=3.0",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#5a0c18",
   "theme_color": "#5a0c18",
   "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
     {
       "src": "favicon.svg",
       "sizes": "any",
