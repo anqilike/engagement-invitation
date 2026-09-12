@@ -3,6 +3,7 @@
 
   const cover = document.getElementById("invitationCover");
   const openButton = document.getElementById("openInvitation");
+  const coverPaper = cover ? cover.querySelector(".invitation-cover__paper") : null;
   if (!cover) return;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -38,6 +39,7 @@
   };
 
   if (openButton) openButton.addEventListener("click", open);
+  if (coverPaper) coverPaper.addEventListener("click", open);
   cover.addEventListener("click", (event) => {
     if (event.target === cover) open();
   });
