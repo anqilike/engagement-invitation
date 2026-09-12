@@ -28,14 +28,21 @@
   const open = () => {
     if (cover.classList.contains("is-opening")) return;
     hidePreloader();
-    cover.classList.add("is-opening");
+    cover.classList.add("is-touched");
+    document.body.classList.add("cover-opening");
 
     if (reducedMotion) {
       finish();
       return;
     }
 
-    window.setTimeout(finish, 1700);
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => cover.classList.add("is-opening"));
+    });
+    window.setTimeout(() => {
+      document.body.classList.remove("cover-opening");
+      finish();
+    }, 1750);
   };
 
   if (openButton) openButton.addEventListener("click", open);
