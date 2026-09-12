@@ -13,7 +13,7 @@ body.invitation-cover-mode.cover-locked {
   place-items: center;
   overflow: hidden;
   padding: max(0.6rem, env(safe-area-inset-top)) 0.6rem max(0.6rem, env(safe-area-inset-bottom));
-  background: #0e0705;
+  background: transparent;
   isolation: isolate;
 }
 
@@ -21,16 +21,24 @@ body.invitation-cover-mode.cover-locked {
   display: none !important;
 }
 
-.invitation-cover.is-opening {
-  background: rgba(14, 7, 5, 0.42);
-  transition: background 0.9s ease 0.15s;
+.invitation-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #0e0705;
+  transition: opacity 0.75s ease 0.25s;
+}
+
+.invitation-cover.is-opening::before {
+  opacity: 0;
 }
 
 .invitation-cover__panel {
   position: absolute;
   top: 0;
   bottom: 0;
-  z-index: 0;
+  z-index: 1;
   width: 51%;
   background: #951f19;
   transition: transform 1.25s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.8s ease;
@@ -47,7 +55,7 @@ body.invitation-cover-mode.cover-locked {
 
 .invitation-cover__paper {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(94vw, 34rem, calc(94svh * 0.5786));
   aspect-ratio: 854 / 1476;
   overflow: hidden;
@@ -66,21 +74,6 @@ body.invitation-cover-mode.cover-locked {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   transition: opacity 0.55s ease 0.35s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.invitation-cover__spine {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  z-index: 7;
-  width: 1px;
-  opacity: 0;
-  transform: scaleY(0);
-  transform-origin: center;
-  background: linear-gradient(180deg, transparent, #ffe09d 24%, #fff7dd 50%, #ffe09d 76%, transparent);
-  box-shadow: 0 0 18px rgba(255, 215, 130, 0.68);
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
 }
 
 .invitation-cover__paper::before {
@@ -302,53 +295,54 @@ body.invitation-cover-mode.cover-locked {
   color: rgba(255, 235, 195, 0.9);
 }
 
-.invitation-cover.is-touched .invitation-cover__spine {
-  opacity: 1;
-  transform: scaleY(1);
-}
-
-.invitation-cover.is-touched .invitation-cover__paper {
-  transform: translateY(-5px) scale(1.012);
-  box-shadow:
-    0 42px 110px rgba(0, 0, 0, 0.62),
-    0 0 0 1px rgba(255, 225, 160, 0.28),
-    inset 0 0 70px rgba(65, 0, 0, 0.16);
-}
-
 .invitation-cover.is-opening .invitation-cover__paper {
-  transform: perspective(1250px) rotateY(-102deg) scale(1.01);
-  opacity: 0;
-  transition:
-    transform 1.3s cubic-bezier(0.72, 0, 0.22, 1),
-    opacity 0.38s ease 0.82s;
+  animation: letterOpen 1.48s cubic-bezier(0.55, 0.02, 0.2, 1) both;
+  will-change: transform, opacity;
 }
 
-.invitation-cover.is-opening .invitation-cover__panel--left {
-  transform: translateX(-15%) rotate(-0.8deg);
+.invitation-cover.is-opening .invitation-cover__paper::after {
   opacity: 0;
+  mix-blend-mode: normal;
+  transition: opacity 0.2s ease;
 }
 
-.invitation-cover.is-opening .invitation-cover__panel--right {
-  transform: translateX(15%) rotate(0.8deg);
+.invitation-cover.is-opening .invitation-cover__panel {
   opacity: 0;
+  transform: translate3d(0, 0, 0);
 }
 
 body.cover-opening .site-header,
 body.cover-opening main {
-  opacity: 0.28;
-  transform: scale(1.018);
-  filter: blur(9px);
+  opacity: 0.78;
 }
 
 body.cover-opened .site-header,
 body.cover-opened main {
   opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-  transition:
-    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 1s ease;
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.cover-locked .hero__media img {
+  animation-play-state: paused !important;
+}
+
+body.cover-locked .petal-canvas {
+  visibility: hidden;
+}
+
+@keyframes letterOpen {
+  0% {
+    transform: perspective(1150px) translate3d(0, 0, 0) rotateY(0) scale(1);
+    opacity: 1;
+  }
+  16% {
+    transform: perspective(1150px) translate3d(0, -5px, 0) rotateY(-4deg) scale(1.012);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(1150px) translate3d(-2%, 0, 0) rotateY(-104deg) scale(1.008);
+    opacity: 0.04;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
