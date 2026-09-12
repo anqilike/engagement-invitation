@@ -1,0 +1,338 @@
+/* V3.0 · 请柬开启页 */
+
+body.invitation-cover-mode.cover-locked {
+  height: 100%;
+  overflow: hidden;
+}
+
+.invitation-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 4500;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  color: #ffe5aa;
+  background: #7f120d;
+  isolation: isolate;
+}
+
+.invitation-cover[hidden] {
+  display: none !important;
+}
+
+.invitation-cover__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 51%;
+  background:
+    radial-gradient(circle at 24% 20%, rgba(255, 196, 115, 0.14), transparent 22rem),
+    radial-gradient(circle at 76% 84%, rgba(114, 0, 8, 0.32), transparent 24rem),
+    linear-gradient(145deg, #a52215, #7c0d0a 56%, #5f0708);
+  box-shadow: inset 0 0 90px rgba(40, 0, 0, 0.32);
+  transition: transform 1.35s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+.invitation-cover__panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 235, 190, 0.35) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(90deg, rgba(255, 230, 175, 0.24) 0 1px, transparent 1px 7px);
+  mix-blend-mode: soft-light;
+}
+
+.invitation-cover__panel--left {
+  left: 0;
+}
+
+.invitation-cover__panel--right {
+  right: 0;
+}
+
+.invitation-cover__paper {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(90vw, 34rem);
+  max-height: 94vh;
+  justify-items: center;
+  padding: clamp(1.6rem, 5vw, 3.4rem) clamp(1.2rem, 5vw, 3rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 218, 138, 0.62);
+  border-radius: 7px;
+  text-align: center;
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.08), transparent 38%),
+    linear-gradient(160deg, #a52416, #8a130f 58%, #75100d);
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 7px rgba(255, 218, 138, 0.04),
+    inset 0 0 60px rgba(70, 0, 0, 0.22);
+  transition: opacity 0.55s ease 0.35s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.invitation-cover__paper::before {
+  content: "";
+  position: absolute;
+  inset: 0.65rem;
+  border: 1px solid rgba(255, 218, 138, 0.3);
+  pointer-events: none;
+}
+
+.invitation-cover__vertical {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.45rem;
+  padding: 0.5rem 0.2rem;
+  border: 1px solid rgba(255, 218, 138, 0.5);
+  color: #ffe5aa;
+  font-family: var(--serif);
+  font-size: 0.84rem;
+  letter-spacing: 0.28em;
+  line-height: 1.2;
+  writing-mode: vertical-rl;
+}
+
+.invitation-cover__seal {
+  position: absolute;
+  top: 0.5rem;
+  right: 1.15rem;
+  color: rgba(255, 210, 112, 0.5);
+  font-family: var(--serif);
+  font-size: clamp(4.5rem, 20vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.invitation-cover__flower {
+  position: absolute;
+  color: rgba(255, 219, 174, 0.56);
+  pointer-events: none;
+}
+
+.invitation-cover__flower--top {
+  top: -1.4rem;
+  left: -1.2rem;
+  width: 9.5rem;
+}
+
+.invitation-cover__flower--bottom {
+  right: -1.5rem;
+  bottom: -1.5rem;
+  width: 10.5rem;
+}
+
+.invitation-cover__eyebrow {
+  position: relative;
+  z-index: 1;
+  margin: 3.8rem 0 0;
+  color: #ffe6b4;
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 6vw, 2.05rem);
+  letter-spacing: 0.16em;
+}
+
+.invitation-cover__title {
+  position: relative;
+  z-index: 1;
+  max-width: 19rem;
+  margin: 1rem 0 0;
+  color: rgba(255, 243, 220, 0.9);
+  font-family: var(--serif);
+  font-size: clamp(0.92rem, 3.8vw, 1.1rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 1.8;
+}
+
+.invitation-cover__rule {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(68%, 15rem);
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 1.2rem;
+}
+
+.invitation-cover__rule::before,
+.invitation-cover__rule::after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 218, 138, 0.72));
+}
+
+.invitation-cover__rule::after {
+  background: linear-gradient(90deg, rgba(255, 218, 138, 0.72), transparent);
+}
+
+.invitation-cover__rule span {
+  width: 5px;
+  height: 5px;
+  transform: rotate(45deg);
+  background: #ffd98b;
+}
+
+.invitation-cover__poem,
+.invitation-cover__names,
+.invitation-cover__label,
+.invitation-cover__date,
+.invitation-cover__venue {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--serif);
+}
+
+.invitation-cover__poem {
+  color: rgba(255, 244, 223, 0.86);
+  font-size: clamp(0.8rem, 3.3vw, 0.95rem);
+  letter-spacing: 0.12em;
+  line-height: 1.9;
+}
+
+.invitation-cover__names {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+  color: #ffe8b8;
+  font-size: clamp(1.15rem, 4.8vw, 1.55rem);
+  letter-spacing: 0.16em;
+}
+
+.invitation-cover__names i {
+  display: grid;
+  width: 1.55rem;
+  height: 1.55rem;
+  place-items: center;
+  border: 1px solid rgba(255, 218, 138, 0.6);
+  border-radius: 50%;
+  font-size: 0.68rem;
+  font-style: normal;
+}
+
+.invitation-cover__label {
+  margin-top: 1.3rem;
+  color: rgba(255, 232, 186, 0.72);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+}
+
+.invitation-cover__date,
+.invitation-cover__venue {
+  margin-top: 0.45rem;
+  color: #fff0d2;
+  font-size: clamp(0.82rem, 3.4vw, 0.98rem);
+  line-height: 1.7;
+}
+
+.invitation-cover__venue {
+  max-width: 22rem;
+  color: rgba(255, 241, 215, 0.82);
+  font-size: clamp(0.75rem, 3.1vw, 0.9rem);
+}
+
+.invitation-cover__button {
+  position: relative;
+  z-index: 1;
+  min-height: 48px;
+  margin-top: 1.55rem;
+  padding: 0.78rem 1.8rem;
+  border: 1px solid rgba(255, 219, 140, 0.78);
+  border-radius: 999px;
+  color: #7b0d0b;
+  background: linear-gradient(115deg, #ffe9b8, #efbd5f 55%, #ffe8ad);
+  box-shadow: 0 12px 34px rgba(40, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  font-family: var(--serif);
+  font-size: 0.96rem;
+  letter-spacing: 0.2em;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.invitation-cover__button:hover,
+.invitation-cover__button:active {
+  transform: translateY(-2px) scale(0.99);
+  box-shadow: 0 18px 40px rgba(40, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.invitation-cover__hint {
+  position: relative;
+  z-index: 1;
+  margin: 0.85rem 0 0;
+  color: rgba(255, 232, 186, 0.5);
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+}
+
+.invitation-cover.is-opening .invitation-cover__panel--left {
+  transform: translateX(-101%) rotate(-1deg);
+}
+
+.invitation-cover.is-opening .invitation-cover__panel--right {
+  transform: translateX(101%) rotate(1deg);
+}
+
+.invitation-cover.is-opening .invitation-cover__paper {
+  opacity: 0;
+  transform: translateY(-1.5rem) scale(1.035);
+}
+
+.cover-opened .hero__content {
+  animation: coverContentIn 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+@keyframes coverContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .invitation-cover {
+    padding: 0.75rem;
+  }
+
+  .invitation-cover__paper {
+    width: min(94vw, 31rem);
+    padding: 1.25rem 1rem 1.4rem;
+  }
+
+  .invitation-cover__eyebrow {
+    margin-top: 3.2rem;
+  }
+
+  .invitation-cover__title {
+    margin-top: 0.7rem;
+  }
+
+  .invitation-cover__flower--top {
+    width: 7.2rem;
+  }
+
+  .invitation-cover__flower--bottom {
+    width: 8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invitation-cover__panel,
+  .invitation-cover__paper,
+  .invitation-cover__button {
+    transition: none !important;
+  }
+}
