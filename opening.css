@@ -195,14 +195,25 @@ body.invitation-cover-mode.cover-locked {
 }
 
 .invitation-cover__names i {
-  display: grid;
+  display: inline-flex;
   width: 1.56rem;
   height: 1.56rem;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
+  flex: none;
   border: 1px solid rgba(255, 219, 144, 0.68);
   border-radius: 50%;
   font-size: 0.66rem;
   font-style: normal;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.invitation-cover__names i span {
+  display: block;
+  line-height: 1;
+  transform: translateY(-0.5px);
 }
 
 .invitation-cover__label {
