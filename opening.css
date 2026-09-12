@@ -106,9 +106,9 @@ body.invitation-cover-mode.cover-locked {
 
 .invitation-cover__double-happiness {
   top: -2%;
-  right: -5%;
-  width: 31%;
-  opacity: 0.93;
+  right: -1%;
+  width: 42%;
+  opacity: 1;
 }
 
 .invitation-cover__eyebrow,
@@ -250,11 +250,15 @@ body.invitation-cover-mode.cover-locked {
   padding: 0.3rem 0.7rem;
   transform: translateX(-50%);
   border: 0;
-  color: rgba(255, 232, 183, 0.52);
-  background: transparent;
+  color: rgba(255, 235, 195, 0.78);
+  background: rgba(116, 10, 8, 0.28);
+  border-radius: 999px;
   font-family: var(--serif);
   font-size: 0.62rem;
   letter-spacing: 0.22em;
+  text-shadow: 0 1px 8px rgba(60, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   transition: color 0.3s, opacity 0.3s;
 }
 
