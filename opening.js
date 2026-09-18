@@ -22,9 +22,16 @@
 
   const playMusic = () => {
     if (!music) return;
-    music.volume = 0.32;
+    music.muted = false;
+    music.volume = 0.68;
     const playback = music.play();
-    if (playback && typeof playback.catch === "function") playback.catch(() => {});
+    if (playback && typeof playback.catch === "function") {
+      playback.catch(() => {
+        window.setTimeout(() => {
+          music.play().catch(() => {});
+        }, 220);
+      });
+    }
   };
 
   const toggleMusic = () => {
