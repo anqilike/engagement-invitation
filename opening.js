@@ -15,9 +15,12 @@
   const syncMusicButton = () => {
     if (!music || !musicToggle) return;
     const playing = !music.paused && !music.ended;
+    const label = musicToggle.querySelector(".music-toggle__text");
     musicToggle.classList.toggle("is-playing", playing);
     musicToggle.setAttribute("aria-pressed", String(playing));
     musicToggle.setAttribute("aria-label", playing ? "暂停背景音乐" : "播放背景音乐");
+    if (label) label.textContent = playing ? "暂停音乐" : musicToggle.classList.contains("is-attention") ? "点击播放音乐" : "播放音乐";
+    if (playing) musicToggle.classList.remove("is-attention");
   };
 
   const playMusic = () => {
@@ -27,6 +30,11 @@
     const playback = music.play();
     if (playback && typeof playback.catch === "function") {
       playback.catch(() => {
+        if (musicToggle) {
+          musicToggle.classList.add("is-attention");
+          const label = musicToggle.querySelector(".music-toggle__text");
+          if (label) label.textContent = "点击播放音乐";
+        }
         window.setTimeout(() => {
           music.play().catch(() => {});
         }, 220);
@@ -77,6 +85,7 @@
   };
 
   if (openButton) openButton.addEventListener("click", open);
+  if (openButton) openButton.addEventListener("pointerdown", playMusic);
   if (coverPaper) coverPaper.addEventListener("click", open);
   if (musicToggle) musicToggle.addEventListener("click", toggleMusic);
   if (music) {
@@ -85,6 +94,7 @@
     music.addEventListener("ended", syncMusicButton);
   }
   syncMusicButton();
+  if (music && music.preload !== "none") music.load();
   cover.addEventListener("click", (event) => {
     if (event.target === cover) open();
   });
