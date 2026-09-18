@@ -26,7 +26,7 @@
   const playMusic = () => {
     if (!music) return;
     music.muted = false;
-    music.volume = 0.55;
+    music.volume = 0.8;
     const playback = music.play();
     if (playback && typeof playback.catch === "function") {
       playback.catch(() => {
