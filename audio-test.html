@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5a0c18">
+  <title>背景音乐测试</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: #fff1d0;
+      background: radial-gradient(circle at 50% 20%, #96231d, #4d0710 72%);
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    .card {
+      width: min(94vw, 560px);
+      padding: 28px 22px;
+      border: 1px solid rgba(255, 218, 138, 0.55);
+      border-radius: 22px;
+      text-align: center;
+      background: rgba(84, 7, 19, 0.78);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+    h1 { margin: 0 0 10px; font-size: 24px; letter-spacing: 0.12em; }
+    p { margin: 14px 0; color: rgba(255, 240, 214, 0.82); line-height: 1.8; }
+    audio { width: 100%; margin: 12px 0; }
+    a { color: #ffe2a0; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>背景音乐测试</h1>
+    <p>点击下面的播放按钮测试声音。</p>
+    <audio controls preload="auto" loop src="/engagement-invitation/assets/audio/festive-instrumental.mp3?v=3"></audio>
+    <p>如果这里也无声，问题不在网页，而在浏览器或设备音量。</p>
+    <p><a href="/engagement-invitation/shuangxi-linmen/">返回请柬</a></p>
+  </main>
+</body>
+</html>
