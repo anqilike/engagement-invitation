@@ -295,6 +295,71 @@ body.invitation-cover-mode.cover-locked {
   color: rgba(255, 235, 195, 0.9);
 }
 
+.music-toggle {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: calc(1.1rem + env(safe-area-inset-bottom));
+  z-index: 3200;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  min-height: 42px;
+  padding: 0.55rem 0.82rem;
+  transform: translateY(10px);
+  border: 1px solid rgba(255, 218, 138, 0.55);
+  border-radius: 999px;
+  opacity: 0;
+  color: rgba(255, 238, 205, 0.9);
+  background: rgba(93, 10, 26, 0.76);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  transition: opacity 0.5s ease, transform 0.5s var(--ease), border-color 0.3s, background 0.3s;
+}
+
+body.cover-opened .music-toggle {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.music-toggle:hover,
+.music-toggle:active {
+  border-color: rgba(255, 228, 165, 0.9);
+  background: rgba(119, 14, 31, 0.88);
+}
+
+.music-toggle__icon {
+  display: grid;
+  width: 1.28rem;
+  height: 1.28rem;
+  place-items: center;
+  border-radius: 50%;
+  color: #75100d;
+  background: linear-gradient(135deg, #ffe9b5, #efbd5f);
+  font-size: 0.76rem;
+  line-height: 1;
+}
+
+.music-toggle.is-playing .music-toggle__icon {
+  animation: musicPulse 1.55s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 207, 100, 0);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 207, 100, 0.12), 0 0 16px rgba(255, 207, 100, 0.55);
+    transform: scale(1.06);
+  }
+}
+
 .invitation-cover.is-opening .invitation-cover__paper {
   animation: letterOpen 1.48s cubic-bezier(0.55, 0.02, 0.2, 1) both;
   will-change: transform, opacity;
